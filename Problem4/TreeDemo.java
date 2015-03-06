@@ -4,11 +4,11 @@ import java.awt.*;
 import javax.swing.*;
 import javax.imageio.*;
 
-interface Terrain
+interface Flyweight
 {
 	void draw(Graphics graphics, int x, int y);
 }
-class Tree implements Terrain
+class Tree implements Flyweight
 {
 	private int x;
 	private int y;
@@ -34,14 +34,18 @@ class Tree implements Terrain
 }
 class TreeFactory
 {
-	private static final ArrayList<Tree> mylist = new ArrayList<Tree>();
-	public static Terrain getTree(String type)
+	private static Map<String, Flyweight> trees = new HashMap<String, Flyweight>();
+	public static Flyweight getTree(String type)
 	{
-		Tree tree = new Tree(type);
-		mylist.add(tree);
-		return tree;
+		Flyweight t = trees.get(type);
+		if(t == null){
+			t = new Tree(type);
+			trees.put(type, t);
+		}
+		return t;
    }
 }
+
 /**
  * Don’t change anything in TreeDemo
  */
